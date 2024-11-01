@@ -15,13 +15,11 @@ interface UserService {
      *
      * @param userAccount 账号
      * @param email       邮箱
-     * @param request     servlet请求对象，用于将验证码存入session
      * @return 发送结果
      */
     fun sendCode(
         userAccount: String,
         email: String,
-        request: HttpServletRequest
     ): BaseResponse<String>
 
     /**

@@ -16,6 +16,9 @@ dependencies {
     implementation(project(":common"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.springframework.boot:spring-boot-starter-mail")
+    // https://mvnrepository.com/artifact/org.redisson/redisson
+    implementation("org.redisson:redisson:3.37.0")
+
 }
 
 tasks.test {

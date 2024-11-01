@@ -1,21 +1,53 @@
 package cn.cola.user.service.impl
 
 import cn.cola.common.common.BaseResponse
+import cn.cola.common.common.ErrorCode
+import cn.cola.common.common.ResultUtils
+import cn.cola.common.common.exception.ThrowUtils
+import cn.cola.user.constant.UserConstant
 import cn.cola.user.service.UserService
 import cn.cola.user.utils.MailUtils
+import jakarta.annotation.Resource
 import jakarta.servlet.http.HttpServletRequest
+import org.redisson.api.RedissonClient
+import java.util.concurrent.TimeUnit
 
 class UserServiceImpl : UserService {
+
+    @Resource
+    private lateinit var redissonClient: RedissonClient
+
     /**
      * 发送验证码服务
      *
      * @param userAccount 账号
      * @param email       邮箱
-     * @param request     servlet请求对象，用于将验证码存入session
      * @return 发送结果
      */
-    override fun sendCode(userAccount: String, email: String, request: HttpServletRequest): BaseResponse<String> {
+    override fun sendCode(userAccount: String, email: String): BaseResponse<String> {
+        // 从redis缓存中查看是否已经发送了验证码
+        val mapCache = redissonClient.getMapCache<String, Int>("code")
+        ThrowUtils.throwIf(mapCache.containsKey(email), ErrorCode.FORBIDDEN_ERROR, "验证码已发送，请稍后再试")
 
+        // 验证账号是否合法
+        ThrowUtils.throwIf(
+            userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()),
+            ErrorCode.PARAMS_ERROR,
+            "账号不合法"
+        )
+        // 验证邮箱是否合法
+        ThrowUtils.throwIf(
+            email.matches(UserConstant.EMAIL_REGEX.toRegex()),
+            ErrorCode.PARAMS_ERROR,
+            "邮箱不合法"
+        )
+
+        // 生成验证码并发送至邮箱
+        val verificationCode = MailUtils.sendVerificationCode(email)
+
+        // 将验证码存入redis缓存
+        mapCache.put(email, verificationCode, 10, TimeUnit.MINUTES)
+        return ResultUtils.success("验证码已发送至邮箱")
     }
 
     /**

@@ -48,4 +48,10 @@ public interface UserConstant {
      */
     String ACCOUNT_REGEX = "^[a-zA-Z0-9]{4,20}$";
 
+    /**
+     * 邮箱正则表达式
+     * 邮箱格式为xxx@xxx.xxx
+     */
+    String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+
 }
