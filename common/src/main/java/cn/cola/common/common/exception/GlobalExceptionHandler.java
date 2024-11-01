@@ -1,9 +1,9 @@
 package cn.cola.common.common.exception;
 
 
-import edu.zafu.teaai.common.BaseResponse;
-import edu.zafu.teaai.common.ErrorCode;
-import edu.zafu.teaai.common.ResultUtils;
+import cn.cola.common.common.BaseResponse;
+import cn.cola.common.common.ErrorCode;
+import cn.cola.common.common.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

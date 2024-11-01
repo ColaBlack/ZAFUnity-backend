@@ -1,4 +1,4 @@
-package cn.cola.common.config;
+package cn.cola.user.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

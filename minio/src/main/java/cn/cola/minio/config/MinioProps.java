@@ -1,4 +1,4 @@
-package cn.cola.common.config;
+package cn.cola.minio.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -2,6 +2,7 @@ package cn.cola.user.service.impl
 
 import cn.cola.common.common.BaseResponse
 import cn.cola.user.service.UserService
+import cn.cola.user.utils.MailUtils
 import jakarta.servlet.http.HttpServletRequest
 
 class UserServiceImpl : UserService {
@@ -14,7 +15,7 @@ class UserServiceImpl : UserService {
      * @return 发送结果
      */
     override fun sendCode(userAccount: String, email: String, request: HttpServletRequest): BaseResponse<String> {
-        TODO("Not yet implemented")
+
     }
 
     /**

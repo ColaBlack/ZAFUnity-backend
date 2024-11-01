@@ -1,7 +1,7 @@
 package cn.cola.common.common.exception;
 
 
-import edu.zafu.teaai.common.ErrorCode;
+import cn.cola.common.common.ErrorCode;
 import lombok.Getter;
 
 /**

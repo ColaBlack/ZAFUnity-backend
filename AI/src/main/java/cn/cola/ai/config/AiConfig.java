@@ -1,4 +1,4 @@
-package cn.cola.common.config;
+package cn.cola.ai.config;
 
 import com.zhipu.oapi.ClientV4;
 import lombok.Data;

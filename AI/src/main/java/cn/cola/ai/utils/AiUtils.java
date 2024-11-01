@@ -1,14 +1,15 @@
-package cn.cola.ai;
+package cn.cola.ai.utils;
 
+
+import cn.cola.ai.config.AiConfig;
 import com.zhipu.oapi.ClientV4;
 import com.zhipu.oapi.Constants;
 import com.zhipu.oapi.service.v4.model.*;
-import edu.zafu.teaai.config.AiConfig;
 import io.reactivex.Flowable;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 

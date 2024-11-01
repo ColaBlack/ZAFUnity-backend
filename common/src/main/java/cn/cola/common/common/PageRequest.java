@@ -1,6 +1,7 @@
 package cn.cola.common.common;
 
-import edu.zafu.teaai.constant.CommonConstant;
+
+import cn.cola.common.constant.CommonConstant;
 import lombok.Data;
 
 /**

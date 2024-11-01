@@ -1,4 +1,4 @@
-package cn.cola.common.constant;
+package cn.cola.minio.constant;
 
 import java.util.Arrays;
 import java.util.List;
