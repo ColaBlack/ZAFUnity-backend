@@ -1,4 +1,4 @@
-package cn.cola;
+package cn.cola.post;
 
 public class Main {
     public static void main(String[] args) {
