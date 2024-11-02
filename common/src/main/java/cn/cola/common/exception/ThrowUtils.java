@@ -1,4 +1,4 @@
-package cn.cola.common.common.exception;
+package cn.cola.common.exception;
 
 
 import cn.cola.common.common.ErrorCode;

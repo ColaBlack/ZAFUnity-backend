@@ -3,7 +3,7 @@
 //
 //import cn.cola.common.annotation.AuthCheck;
 //import cn.cola.common.common.ErrorCode;
-//import cn.cola.common.common.exception.BusinessException;
+//import cn.cola.common.exception.BusinessException;
 //import jakarta.annotation.Resource;
 //import jakarta.servlet.http.HttpServletRequest;
 //import org.aspectj.lang.ProceedingJoinPoint;
