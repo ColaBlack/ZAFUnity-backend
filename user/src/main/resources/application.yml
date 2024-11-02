@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: user-service
+  mail:
+    host: smtp.163.com
+    username: a2698360477@163.com
+    password: RBcBvBtDDRFR7WXF
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      database: 0

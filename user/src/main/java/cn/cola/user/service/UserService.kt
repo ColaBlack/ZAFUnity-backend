@@ -61,11 +61,13 @@ interface UserService {
     /**
      * 注销服务
      *
-     * @param request servlet请求对象，用于清除cookie
+     * @param request servlet请求对象，用于获取旧cookie
+     * @param response servlet响应对象，用于清除cookie
      * @return 注销结果
      */
     fun logout(
-        request: HttpServletRequest
+        request: HttpServletRequest,
+        response: HttpServletResponse
     ): String
 
     /**

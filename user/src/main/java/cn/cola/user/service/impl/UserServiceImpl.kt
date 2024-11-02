@@ -212,11 +212,23 @@ class UserServiceImpl : UserService {
     /**
      * 注销服务
      *
-     * @param request servlet请求对象，用于清除cookie
+     * @param request servlet请求对象，用于获取旧cookie
+     * @param response servlet响应对象，用于清除cookie
      * @return 注销结果
      */
-    override fun logout(request: HttpServletRequest): String {
-        TODO("Not yet implemented")
+    override fun logout(request: HttpServletRequest, response: HttpServletResponse): String {
+        val oldToken = request.cookies?.firstOrNull { it.name == "token" }
+        // 清除redis缓存
+        val tokenMap = redissonClient.getMapCache<String, String>("token")
+        val userId = JwtUtils.verifyAndGetUserVO(oldToken?.value)
+        tokenMap.remove(userId.toString())
+        // 清除cookie
+        if (oldToken != null) {
+            oldToken.value = ""
+            oldToken.maxAge = 0
+            response.addCookie(oldToken)
+        }
+        return "注销成功"
     }
 
     /**
