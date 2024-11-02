@@ -1,5 +1,6 @@
 package cn.cola.user.service
 
+import cn.cola.user.model.vo.UserVO
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 
@@ -56,7 +57,7 @@ interface UserService {
         password: String,
         request: HttpServletRequest,
         response: HttpServletResponse
-    ): String
+    ): UserVO
 
     /**
      * 注销服务

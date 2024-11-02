@@ -15,8 +15,10 @@ import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.redisson.api.RedissonClient
+import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 
+@Service
 class UserServiceImpl : UserService {
 
     @Resource
@@ -164,7 +166,7 @@ class UserServiceImpl : UserService {
         password: String,
         request: HttpServletRequest,
         response: HttpServletResponse
-    ): String {
+    ): UserVO {
         // 验证账号是否合法
         ThrowUtils.throwIf(
             userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()),
@@ -186,8 +188,9 @@ class UserServiceImpl : UserService {
             ThrowUtils.throwIf(true, ErrorCode.FORBIDDEN_ERROR, "账号或密码错误")
         }
 
+        val userVO = UserVO(user)
         // 生成jwt
-        val jwt = JwtUtils.generateToken(UserVO(user))
+        val jwt = JwtUtils.generateToken(userVO)
 
         // 清除旧的jwt
         val oldToken = request.cookies?.firstOrNull { it.name == "token" }
@@ -204,7 +207,7 @@ class UserServiceImpl : UserService {
         // 将jwt存入cookie
         response.addCookie(Cookie("token", jwt))
 
-        return "登录成功"
+        return userVO
     }
 
     /**
