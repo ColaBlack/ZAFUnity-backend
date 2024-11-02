@@ -5,10 +5,12 @@ import cn.cola.common.common.ErrorCode;
 import cn.cola.common.common.ResultUtils;
 import cn.cola.common.exception.ThrowUtils;
 import cn.cola.post.model.dto.PublishPostDTO;
+import cn.cola.post.model.vo.PostVO;
 import cn.cola.post.service.PostService;
 import cn.cola.user.model.vo.UserVO;
 import cn.cola.user.utils.JwtUtils;
 import jakarta.annotation.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +36,17 @@ public class PostController {
         String content = publishPostDTO.getContent();
         List<String> tags = publishPostDTO.getTags();
         Long ret = postService.publishPost(tags, title, content, authorId);
+        return ResultUtils.success(ret);
+    }
+
+    @GetMapping("/search")
+    public BaseResponse<Page<PostVO>> searchPost(@RequestParam(value = "keyword") String keyword,
+                                                 @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+                                                 @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        ThrowUtils.throwIf(page < 1, ErrorCode.PARAMS_ERROR, "页码不能小于1");
+        ThrowUtils.throwIf(size < 1, ErrorCode.PARAMS_ERROR, "每页条数不能小于1");
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR, "每页条数不能大于20");
+        Page<PostVO> ret = postService.searchPost(keyword, page, size);
         return ResultUtils.success(ret);
     }
 }

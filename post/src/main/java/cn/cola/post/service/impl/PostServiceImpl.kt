@@ -4,11 +4,14 @@ import cn.cola.common.common.ErrorCode
 import cn.cola.common.exception.ThrowUtils
 import cn.cola.post.constant.PostConst
 import cn.cola.post.model.entity.Post
+import cn.cola.post.model.vo.PostVO
 import cn.cola.post.repo.PostRepo
 import cn.cola.post.service.PostService
 import cn.cola.user.repo.UserRepo
 import cn.hutool.json.JSONUtil
 import jakarta.annotation.Resource
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
@@ -36,6 +39,32 @@ class PostServiceImpl : PostService {
         ThrowUtils.throwIf(ret == null, ErrorCode.SYSTEM_ERROR, "发布帖子失败")
         return ret!!
     }
+
+    /**
+     * 搜索帖子
+     * @param keywords 关键字
+     * @param pageNum 页码
+     * @param pageSize 每页大小
+     * @return 帖子列表
+     */
+    override fun searchPost(keywords: String, pageNum: Int, pageSize: Int): Page<PostVO> {
+        ThrowUtils.throwIf(keywords.isBlank(), ErrorCode.PARAMS_ERROR, "关键词不能为空")
+
+        val searchPattern = "%$keywords%"
+        val posts = postRepo.findPostsByTitleIsLikeOrContentLikeOrPostTagsLike(
+            searchPattern,
+            searchPattern,
+            searchPattern,
+            PageRequest.of(pageNum, pageSize)
+        )
+
+        // 将帖子转化为PostVO的列表
+        posts.map { PostVO(it) }
+
+        // 返回Page对象时，保持与原posts的分页信息
+        return posts.map { PostVO(it) }
+    }
+
 
     /**
      * 验证帖子参数

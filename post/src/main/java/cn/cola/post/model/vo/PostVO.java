@@ -1,8 +1,10 @@
 package cn.cola.post.model.vo;
 
+import cn.cola.post.model.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -56,5 +58,10 @@ public class PostVO {
      * 更新时间
      */
     private Instant updateTime;
+
+    public PostVO(Post post) {
+        BeanUtils.copyProperties(post, this);
+    }
+
 
 }
