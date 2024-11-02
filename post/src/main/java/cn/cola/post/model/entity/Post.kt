@@ -1,56 +1,73 @@
-package cn.cola.post.model.entity;
+package cn.cola.post.model.entity
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.time.Instant;
+import jakarta.persistence.*
+import org.hibernate.annotations.ColumnDefault
+import java.time.Instant
 
 /**
- * 帖子实体类
- *
- * @author ColaBlack
+ * 帖子表
  */
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "post", schema = "zafunity")
-public class Post {
+open class Post {
+    /**
+     * 帖子ID
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id", nullable = false)
-    private Long id;
+    open var id: Long? = null
 
+    /**
+     * 帖子标题
+     */
     @Column(name = "title", nullable = false, length = 50)
-    private String title;
+    open var title: String? = null
 
+    /**
+     * 帖子内容
+     */
     @Lob
     @Column(name = "content", nullable = false)
-    private String content;
+    open var content: String? = null
 
+    /**
+     * 发帖用户ID
+     */
     @Column(name = "creater_id", nullable = false)
-    private Long createrId;
+    open var createrId: Long? = null
 
+    /**
+     * 帖子标签(JSON)
+     */
+    @Column(name = "post_tags", length = 200)
+    open var postTags: String? = null
+
+    /**
+     * 帖子点赞数
+     */
     @ColumnDefault("0")
     @Column(name = "starts", nullable = false)
-    private Integer starts;
+    open var starts: Int? = null
 
-    @Column(name = "post_tags", length = 200)
-    private String postTags;
-
+    /**
+     * 创建时间
+     */
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "create_time", nullable = false)
-    private Instant createTime;
+    open var createTime: Instant? = null
 
+    /**
+     * 更新时间
+     */
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "update_time", nullable = false)
-    private Instant updateTime;
+    open var updateTime: Instant? = null
 
+    /**
+     * 是否删除 0未删除 1已删除
+     */
     @ColumnDefault("0")
     @Column(name = "is_delete", nullable = false)
-    private Boolean isDelete = false;
-
+    open var isDelete: Boolean? = false
 }

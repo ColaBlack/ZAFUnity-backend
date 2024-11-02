@@ -2,6 +2,7 @@ package cn.cola.user.repo;
 
 
 import cn.cola.user.model.entity.User;
+import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -10,6 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  *
  * @author ColaBlack
  */
+@SoftDelete(columnName = "is_delete")
 public interface UserRepo extends JpaRepository<User, Long>, PagingAndSortingRepository<User, Long> {
 
     /**

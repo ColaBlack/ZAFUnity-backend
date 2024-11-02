@@ -15,6 +15,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(project(":common"))
     implementation(kotlin("stdlib-jdk8"))
+    implementation(project(":user"))
 }
 
 tasks.test {
