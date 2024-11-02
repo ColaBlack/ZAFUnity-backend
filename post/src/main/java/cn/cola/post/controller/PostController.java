@@ -20,7 +20,6 @@ import java.util.List;
  *
  * @author ColaBlack
  */
-@RequestMapping("/post")
 @RestController
 public class PostController {
 

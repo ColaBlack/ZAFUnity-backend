@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
  *
  * @author ColaBlack
  */
-@RequestMapping("/user")
 @RestController
 public class UserController {
 

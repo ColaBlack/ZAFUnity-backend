@@ -1,9 +1,8 @@
 plugins {
     id("java")
-    kotlin("jvm")
 }
 
-group = "cn.cola.post"
+group = "cn.cola.service"
 version = "1.0.0"
 
 repositories {
@@ -14,14 +13,8 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(project(":common"))
-    implementation(project(":service"))
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(project(":user"))
 }
 
 tasks.test {
     useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(21)
 }
