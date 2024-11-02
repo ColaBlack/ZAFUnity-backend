@@ -1,7 +1,10 @@
 package cn.cola.user.model.vo;
 
 import cn.cola.user.model.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
@@ -11,6 +14,9 @@ import java.time.LocalDate;
  *
  * @author ColaBlack
  */
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 public class UserVO {
 
@@ -35,7 +41,6 @@ public class UserVO {
     private String userProfile;
 
     private String userTags;
-
 
     public UserVO(User user) {
         BeanUtils.copyProperties(user, this);

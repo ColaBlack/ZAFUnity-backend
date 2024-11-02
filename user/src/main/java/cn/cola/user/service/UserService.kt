@@ -1,7 +1,7 @@
 package cn.cola.user.service
 
-import cn.cola.common.common.BaseResponse
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 /**
  * 用户服务接口
@@ -20,7 +20,7 @@ interface UserService {
     fun sendCode(
         userAccount: String,
         email: String,
-    ): BaseResponse<String>
+    ): String
 
     /**
      * 注册服务
@@ -40,21 +40,23 @@ interface UserService {
         email: String,
         code: String,
         request: HttpServletRequest
-    ): BaseResponse<String>
+    ): String
 
     /**
      * 登录服务
      *
      * @param userAccount 账号
      * @param password    密码
-     * @param request     servlet请求对象，用于将jwt存入cookie
+     * @param request     servlet请求对象，用于从cookie中清除旧的jwt
+     * @param response     servlet响应对象，用于将jwt存入cookie
      * @return 登录结果
      */
     fun login(
         userAccount: String,
         password: String,
-        request: HttpServletRequest
-    ): BaseResponse<String>
+        request: HttpServletRequest,
+        response: HttpServletResponse
+    ): String
 
     /**
      * 注销服务
@@ -64,7 +66,7 @@ interface UserService {
      */
     fun logout(
         request: HttpServletRequest
-    ): BaseResponse<String>
+    ): String
 
     /**
      * 修改密码服务
@@ -78,7 +80,7 @@ interface UserService {
         oldPassword: String,
         newPassword: String,
         request: HttpServletRequest
-    ): BaseResponse<String>
+    ): String
 
     /**
      * 忘记密码服务
@@ -96,5 +98,5 @@ interface UserService {
         code: String,
         password: String,
         request: HttpServletRequest
-    ): BaseResponse<String>
+    ): String
 }
