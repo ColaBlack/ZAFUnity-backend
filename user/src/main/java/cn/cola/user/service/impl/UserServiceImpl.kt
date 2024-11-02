@@ -167,18 +167,7 @@ class UserServiceImpl : UserService {
         request: HttpServletRequest,
         response: HttpServletResponse
     ): UserVO {
-        // 验证账号是否合法
-        ThrowUtils.throwIf(
-            userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "账号不合法"
-        )
-        // 验证密码是否合法
-        ThrowUtils.throwIf(
-            !password.matches(UserConstant.PASSWORD_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "密码不合法"
-        )
+        validLoginParam(userAccount, password)
 
         val encryptedPassword = EncryptUtils.encryptPassword(password)
 
@@ -266,5 +255,25 @@ class UserServiceImpl : UserService {
         request: HttpServletRequest
     ): String {
         TODO("Not yet implemented")
+    }
+
+    /**
+     * 验证登录参数
+     * @param userAccount 账号
+     * @param password 密码
+     */
+    private fun validLoginParam(userAccount: String, password: String) {
+        // 验证账号是否合法
+        ThrowUtils.throwIf(
+            userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()),
+            ErrorCode.PARAMS_ERROR,
+            "账号不合法"
+        )
+        // 验证密码是否合法
+        ThrowUtils.throwIf(
+            !password.matches(UserConstant.PASSWORD_REGEX.toRegex()),
+            ErrorCode.PARAMS_ERROR,
+            "密码不合法"
+        )
     }
 }

@@ -51,10 +51,21 @@ public class UserController {
      * 登录
      */
     @PostMapping("/login")
-    public BaseResponse<UserVO> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) {
+    public BaseResponse<UserVO> login(@RequestBody LoginDTO loginDTO,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response) {
         String userAccount = loginDTO.getUserAccount();
         String password = loginDTO.getPassword();
         UserVO ret = userService.login(userAccount, password, request, response);
+        return ResultUtils.success(ret);
+    }
+
+    /**
+     * 退出登录
+     */
+    @PostMapping("/logout")
+    public BaseResponse<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        String ret = userService.logout(request, response);
         return ResultUtils.success(ret);
     }
 }
