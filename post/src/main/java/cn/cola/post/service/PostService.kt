@@ -17,4 +17,11 @@ interface PostService {
      * @return 帖子列表
      */
     fun searchPost(keywords: String, pageNum: Int, pageSize: Int): Page<PostVO>
+
+    /**
+     * 获取帖子详情
+     * @param postId 帖子ID
+     * @return 帖子详情
+     */
+    fun getPostDetail(postId: Long): PostVO
 }

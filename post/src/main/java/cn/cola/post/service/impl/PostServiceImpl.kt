@@ -1,6 +1,7 @@
 package cn.cola.post.service.impl
 
 import cn.cola.common.common.ErrorCode
+import cn.cola.common.exception.BusinessException
 import cn.cola.common.exception.ThrowUtils
 import cn.cola.post.constant.PostConst
 import cn.cola.post.model.entity.Post
@@ -63,6 +64,18 @@ class PostServiceImpl : PostService {
 
         // 返回Page对象时，保持与原posts的分页信息
         return posts.map { PostVO(it) }
+    }
+
+    /**
+     * 获取帖子详情
+     * @param postId 帖子ID
+     * @return 帖子详情
+     */
+    override fun getPostDetail(postId: Long): PostVO {
+        postRepo.findById(postId).orElseThrow {
+            BusinessException(ErrorCode.NOT_FOUND_ERROR, "帖子不存在")
+        }
+        return PostVO(postRepo.findById(postId).get())
     }
 
 

@@ -49,4 +49,10 @@ public class PostController {
         Page<PostVO> ret = postService.searchPost(keyword, page, size);
         return ResultUtils.success(ret);
     }
+
+    @GetMapping("/get/vo/{postId}")
+    public BaseResponse<PostVO> getPostVO(@PathVariable("postId") Long postId) {
+        PostVO ret = postService.getPostDetail(postId);
+        return ResultUtils.success(ret);
+    }
 }
