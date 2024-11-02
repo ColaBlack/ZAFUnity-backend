@@ -117,12 +117,10 @@ class UserServiceImpl : UserService {
         )
 
         val encryptedPassword = EncryptUtils.encryptPassword(password)
-
-        val user = User.builder()
-            .userAccount(userAccount)
-            .userPassword(encryptedPassword)
-            .email(email)
-            .build()
+        val user = User()
+        user.userAccount = userAccount
+        user.userPassword = encryptedPassword
+        user.email = email
 
         // 加锁，防止并发注册
         val lock = redissonClient.getLock("registerLock${userAccount}")
@@ -201,7 +199,7 @@ class UserServiceImpl : UserService {
 
         // 将jwt存入redis
         redissonClient.getMapCache<String, String>("token")
-            .put(user.id.toString(), jwt, 7, TimeUnit.DAYS)
+            .put(user.id.toString(), jwt, UserConstant.JWT_EXPIRE, TimeUnit.SECONDS)
 
         // 将jwt存入cookie
         response.addCookie(Cookie("token", jwt))

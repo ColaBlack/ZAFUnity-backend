@@ -1,5 +1,6 @@
 package cn.cola.user.utils;
 
+import cn.cola.user.constant.UserConstant;
 import cn.cola.user.model.vo.UserVO;
 import cn.hutool.jwt.JWT;
 import io.micrometer.common.util.StringUtils;
@@ -17,16 +18,6 @@ import java.util.Map;
  * @author ColaBlack
  */
 public class JwtUtils {
-
-    /**
-     * 密钥
-     */
-    private static final byte[] KEY = "cola-black".getBytes();
-
-    /**
-     * 过期时间（秒）：7 天
-     */
-    public static final long EXPIRE = 7 * 24 * 60 * 60;
 
     private JwtUtils() {
     }
@@ -82,9 +73,9 @@ public class JwtUtils {
         // 设置携带数据
         map.forEach(jwt::setPayload);
         // 设置密钥
-        jwt.setKey(KEY);
+        jwt.setKey(UserConstant.JWT_SECRET_KEY);
         // 设置过期时间
-        jwt.setExpiresAt(new Date(System.currentTimeMillis() + EXPIRE * 1000));
+        jwt.setExpiresAt(new Date(System.currentTimeMillis() + UserConstant.JWT_EXPIRE * 1000));
         return jwt.sign();
     }
 
@@ -95,7 +86,7 @@ public class JwtUtils {
      * @return 是否通过校验
      */
     public static boolean verify(String token) {
-        return !StringUtils.isBlank(token) && JWT.of(token).setKey(KEY).verify();
+        return !StringUtils.isBlank(token) && JWT.of(token).setKey(UserConstant.JWT_SECRET_KEY).verify();
     }
 
     /**

@@ -22,8 +22,8 @@ import java.util.UUID;
  * @author ColaBlack
  **/
 @Aspect
-@Component
 @Slf4j
+@Component
 public class LogInterceptor {
 
     /**

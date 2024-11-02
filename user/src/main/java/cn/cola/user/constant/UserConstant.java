@@ -54,4 +54,14 @@ public interface UserConstant {
      */
     String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
+    /**
+     * jwt密钥
+     */
+    byte[] JWT_SECRET_KEY = "cola-black".getBytes();
+
+    /**
+     * jwt过期时间（秒）：7 天
+     */
+    long JWT_EXPIRE = 7 * 24 * 60 * 60;
+
 }

@@ -34,14 +34,15 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-data-redis")
         implementation("org.springframework.boot:spring-boot-starter-web")
-        compileOnly("org.projectlombok:lombok")
         developmentOnly("org.springframework.boot:spring-boot-devtools")
         runtimeOnly("com.mysql:mysql-connector-j")
         annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+        compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-        implementation ("cn.hutool:hutool-all:5.8.26")
+        implementation("cn.hutool:hutool-all:5.8.26")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.21")
     }
 }
 
