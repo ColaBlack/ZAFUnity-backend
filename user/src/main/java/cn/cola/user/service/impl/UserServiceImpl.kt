@@ -2,11 +2,11 @@ package cn.cola.user.service.impl
 
 import cn.cola.common.common.ErrorCode
 import cn.cola.common.exception.ThrowUtils
+import cn.cola.service.user.model.entity.User
+import cn.cola.service.user.model.vo.UserVO
+import cn.cola.service.user.service.UserService
 import cn.cola.user.constant.UserConstant
-import cn.cola.user.model.entity.User
-import cn.cola.user.model.vo.UserVO
 import cn.cola.user.repo.UserRepo
-import cn.cola.user.service.UserService
 import cn.cola.user.utils.EncryptUtils
 import cn.cola.user.utils.JwtUtils
 import cn.cola.user.utils.MailUtils
@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
+
 
 @Service
 class UserServiceImpl : UserService {
@@ -255,6 +256,16 @@ class UserServiceImpl : UserService {
         request: HttpServletRequest
     ): String {
         TODO("Not yet implemented")
+    }
+
+    /**
+     * 根据用户账号查询用户是否存在
+     *
+     * @param id 用户账号
+     * @return true：存在，false：不存在
+     */
+    override fun existsById(id: Long): Boolean {
+        return userRepo.existsById(id)
     }
 
     /**

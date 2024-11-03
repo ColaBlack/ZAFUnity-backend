@@ -4,11 +4,11 @@ import cn.cola.common.common.ErrorCode
 import cn.cola.common.exception.BusinessException
 import cn.cola.common.exception.ThrowUtils
 import cn.cola.post.constant.PostConst
-import cn.cola.post.model.entity.Post
-import cn.cola.post.model.vo.PostVO
 import cn.cola.post.repo.PostRepo
-import cn.cola.post.service.PostService
-import cn.cola.user.repo.UserRepo
+import cn.cola.service.post.model.entity.Post
+import cn.cola.service.post.model.vo.PostVO
+import cn.cola.service.post.service.PostService
+import cn.cola.service.user.service.UserService
 import cn.hutool.json.JSONUtil
 import jakarta.annotation.Resource
 import org.springframework.data.domain.Page
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service
 @Service
 class PostServiceImpl : PostService {
 
-    @Resource
-    private lateinit var userRepo: UserRepo
+
+    private lateinit var usersService: UserService
 
     @Resource
     private lateinit var postRepo: PostRepo
@@ -29,7 +29,7 @@ class PostServiceImpl : PostService {
      */
     override fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Long {
         validPost(tags, title, content)
-        ThrowUtils.throwIf(!userRepo.existsById(authorId), ErrorCode.PARAMS_ERROR, "作者ID异常")
+        ThrowUtils.throwIf(!usersService.existsById(authorId), ErrorCode.PARAMS_ERROR, "作者ID异常")
 
         val post = Post()
         post.title = title

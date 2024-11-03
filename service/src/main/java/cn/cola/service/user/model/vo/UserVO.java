@@ -1,6 +1,6 @@
-package cn.cola.user.model.vo;
+package cn.cola.service.user.model.vo;
 
-import cn.cola.user.model.entity.User;
+import cn.cola.service.user.model.entity.User;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

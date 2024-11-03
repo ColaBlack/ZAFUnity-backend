@@ -1,7 +1,7 @@
 package cn.cola.user.repo;
 
 
-import cn.cola.user.model.entity.User;
+import cn.cola.service.user.model.entity.User;
 import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;

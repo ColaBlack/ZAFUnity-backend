@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    kotlin("jvm")
 }
 
 group = "cn.cola.minio"
@@ -14,8 +15,12 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(project(":common"))
     implementation("io.minio:minio:8.5.13")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+kotlin {
+    jvmToolchain(21)
 }

@@ -1,4 +1,4 @@
-package cn.cola.user.model.entity
+package cn.cola.service.user.model.entity
 
 import jakarta.persistence.*
 import org.hibernate.annotations.ColumnDefault

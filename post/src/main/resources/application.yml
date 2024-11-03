@@ -14,3 +14,13 @@ server:
   port: 1223
   servlet:
     context-path: /api/post
+dubbo:
+  registry:
+    address: nacos://localhost:8848?username=nacos&password=nacos
+    register-mode: instance
+  protocol:
+    name: tri
+    port: 50051
+  application:
+    name: post-service
+    logger: slf4j

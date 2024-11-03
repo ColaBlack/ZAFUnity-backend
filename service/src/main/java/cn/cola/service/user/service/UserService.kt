@@ -1,8 +1,9 @@
-package cn.cola.user.service
+package cn.cola.service.user.service
 
-import cn.cola.user.model.vo.UserVO
+import cn.cola.service.user.model.vo.UserVO
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+
 
 /**
  * 用户服务接口
@@ -102,4 +103,12 @@ interface UserService {
         password: String,
         request: HttpServletRequest
     ): String
+
+    /**
+     * 根据用户账号查询用户是否存在
+     *
+     * @param id 用户账号
+     * @return true：存在，false：不存在
+     */
+    fun existsById(id: Long): Boolean
 }

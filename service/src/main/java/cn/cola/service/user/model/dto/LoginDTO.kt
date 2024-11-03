@@ -1,4 +1,4 @@
-package cn.cola.user.model.dto
+package cn.cola.service.user.model.dto
 
 /**
  * 登录数据传输对象

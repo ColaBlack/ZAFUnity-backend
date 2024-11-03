@@ -2,10 +2,10 @@ package cn.cola.user.controller;
 
 import cn.cola.common.common.BaseResponse;
 import cn.cola.common.common.ResultUtils;
-import cn.cola.user.model.dto.LoginDTO;
-import cn.cola.user.model.dto.RegisterDTO;
-import cn.cola.user.model.vo.UserVO;
-import cn.cola.user.service.UserService;
+import cn.cola.service.user.model.dto.LoginDTO;
+import cn.cola.service.user.model.dto.RegisterDTO;
+import cn.cola.service.user.model.vo.UserVO;
+import cn.cola.service.user.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
