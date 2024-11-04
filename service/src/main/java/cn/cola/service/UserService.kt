@@ -57,7 +57,7 @@ interface UserService {
         password: String,
         request: HttpServletRequest,
         response: HttpServletResponse
-    ): cn.cola.model.vo.UserVO
+    ): UserVO
 
     /**
      * 注销服务

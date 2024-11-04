@@ -3,15 +3,17 @@ package cn.cola.post.service.impl
 import cn.cola.common.common.ErrorCode
 import cn.cola.common.exception.BusinessException
 import cn.cola.common.exception.ThrowUtils
+import cn.cola.model.entity.Post
+import cn.cola.model.vo.PostVO
 import cn.cola.post.constant.PostConst
 import cn.cola.post.repo.PostRepo
-import cn.cola.service.post.model.entity.Post
 import cn.cola.service.PostService
 import cn.hutool.json.JSONUtil
 import jakarta.annotation.Resource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+
 
 @Service
 class PostServiceImpl : PostService {
@@ -43,7 +45,7 @@ class PostServiceImpl : PostService {
      * @param pageSize 每页大小
      * @return 帖子列表
      */
-    override fun searchPost(keywords: String, pageNum: Int, pageSize: Int): Page<cn.cola.model.vo.PostVO> {
+    override fun searchPost(keywords: String, pageNum: Int, pageSize: Int): Page<PostVO> {
         ThrowUtils.throwIf(keywords.isBlank(), ErrorCode.PARAMS_ERROR, "关键词不能为空")
 
         val searchPattern = "%$keywords%"
@@ -55,10 +57,10 @@ class PostServiceImpl : PostService {
         )
 
         // 将帖子转化为PostVO的列表
-        posts.map { cn.cola.model.vo.PostVO(it) }
+        posts.map { PostVO(it) }
 
         // 返回Page对象时，保持与原posts的分页信息
-        return posts.map { cn.cola.model.vo.PostVO(it) }
+        return posts.map { PostVO(it) }
     }
 
     /**
@@ -66,11 +68,11 @@ class PostServiceImpl : PostService {
      * @param postId 帖子ID
      * @return 帖子详情
      */
-    override fun getPostDetail(postId: Long): cn.cola.model.vo.PostVO {
+    override fun getPostDetail(postId: Long): PostVO {
         postRepo.findById(postId).orElseThrow {
             BusinessException(ErrorCode.NOT_FOUND_ERROR, "帖子不存在")
         }
-        return cn.cola.model.vo.PostVO(postRepo.findById(postId).get())
+        return PostVO(postRepo.findById(postId).get())
     }
 
 

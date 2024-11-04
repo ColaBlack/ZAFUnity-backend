@@ -1,6 +1,6 @@
 package cn.cola.post.repo;
 
-import cn.cola.service.post.model.entity.Post;
+import cn.cola.model.entity.Post;
 import org.hibernate.annotations.SoftDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
