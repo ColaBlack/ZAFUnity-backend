@@ -42,13 +42,13 @@ public class UserController {
      * 注册
      */
     @PostMapping("/register")
-    public BaseResponse<String> register(@RequestBody RegisterDTO registerDTO, HttpServletRequest request) {
+    public BaseResponse<String> register(@RequestBody RegisterDTO registerDTO) {
         String userAccount = registerDTO.getUserAccount();
         String password = registerDTO.getPassword();
         String checkPassword = registerDTO.getCheckPassword();
         String email = registerDTO.getEmail();
         String code = registerDTO.getCode();
-        String ret = userService.register(userAccount, password, checkPassword, email, code, request);
+        String ret = userService.register(userAccount, password, checkPassword, email, code);
         return ResultUtils.success(ret);
     }
 
