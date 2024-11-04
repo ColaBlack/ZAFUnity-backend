@@ -1,6 +1,6 @@
-package cn.cola.user.utils
+package cn.cola.common.utils
 
-import cn.cola.user.constant.UserConstant
+import cn.cola.common.constant.UserConstant
 import cn.hutool.crypto.SecureUtil
 
 /**

@@ -1,4 +1,4 @@
-package cn.cola.user.constant;
+package cn.cola.common.constant;
 
 /**
  * 用户常量

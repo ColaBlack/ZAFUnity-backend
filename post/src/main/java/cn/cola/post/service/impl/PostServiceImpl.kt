@@ -8,7 +8,6 @@ import cn.cola.post.repo.PostRepo
 import cn.cola.service.post.model.entity.Post
 import cn.cola.service.post.model.vo.PostVO
 import cn.cola.service.post.service.PostService
-import cn.cola.service.user.service.UserService
 import cn.hutool.json.JSONUtil
 import jakarta.annotation.Resource
 import org.springframework.data.domain.Page
@@ -18,9 +17,6 @@ import org.springframework.stereotype.Service
 @Service
 class PostServiceImpl : PostService {
 
-
-    private lateinit var usersService: UserService
-
     @Resource
     private lateinit var postRepo: PostRepo
 
@@ -29,7 +25,7 @@ class PostServiceImpl : PostService {
      */
     override fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Long {
         validPost(tags, title, content)
-        ThrowUtils.throwIf(!usersService.existsById(authorId), ErrorCode.PARAMS_ERROR, "作者ID异常")
+        ThrowUtils.throwIf(authorId <= 0, ErrorCode.PARAMS_ERROR, "作者ID异常")
 
         val post = Post()
         post.title = title

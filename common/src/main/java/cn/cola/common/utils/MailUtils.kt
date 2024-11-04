@@ -1,4 +1,4 @@
-package cn.cola.user.utils
+package cn.cola.common.utils
 
 import jakarta.annotation.Resource
 import org.springframework.beans.factory.annotation.Value

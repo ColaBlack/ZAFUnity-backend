@@ -3,12 +3,14 @@ package cn.cola.post.controller;
 import cn.cola.common.common.BaseResponse;
 import cn.cola.common.common.ErrorCode;
 import cn.cola.common.common.ResultUtils;
+import cn.cola.common.constant.UserConstant;
 import cn.cola.common.exception.ThrowUtils;
+import cn.cola.common.utils.JwtUtils;
 import cn.cola.service.post.model.dto.PublishPostDTO;
 import cn.cola.service.post.model.vo.PostVO;
 import cn.cola.service.post.service.PostService;
 import cn.cola.service.user.model.vo.UserVO;
-import cn.cola.user.utils.JwtUtils;
+import cn.cola.service.user.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +28,17 @@ public class PostController {
     @Resource
     private PostService postService;
 
+    @Resource
+    private UserService userService;
+
     /**
      * 发布帖子
      */
     @PostMapping("/publish")
-    public BaseResponse<Long> publishPost(@RequestBody PublishPostDTO publishPostDTO, @CookieValue(value = "token") String token) {
+    public BaseResponse<Long> publishPost(@RequestBody PublishPostDTO publishPostDTO,
+                                          @CookieValue(value = UserConstant.USER_LOGIN_STATE) String token) {
         UserVO userVO = JwtUtils.verifyAndGetUserVO(token);
+        ThrowUtils.throwIf(userService.validLoginStatus(token), ErrorCode.NOT_LOGIN_ERROR);
         ThrowUtils.throwIf(userVO == null, ErrorCode.NOT_LOGIN_ERROR);
         Long authorId = userVO.getId();
         String title = publishPostDTO.getTitle();

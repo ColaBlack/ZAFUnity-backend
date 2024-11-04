@@ -1,6 +1,6 @@
-package cn.cola.user.utils;
+package cn.cola.common.utils;
 
-import cn.cola.user.constant.UserConstant;
+import cn.cola.common.constant.UserConstant;
 import cn.cola.service.user.model.vo.UserVO;
 import cn.hutool.jwt.JWT;
 import io.micrometer.common.util.StringUtils;
@@ -96,14 +96,13 @@ public class JwtUtils {
      * @return userVO
      */
     public static UserVO verifyAndGetUserVO(String token) {
+        // 验证数据
         if (!verify(token)) {
             return null;
         }
-        JWT jwt = JWT.of(token);
-        // 验证数据
-        if (!jwt.verify()) {
-            return null;
-        }
+        // 获取jwt
+        JWT jwt = JWT.of(token).setKey(UserConstant.JWT_SECRET_KEY);
+        // 获取userVO
         Class<UserVO> voClass = UserVO.class;
         UserVO userVO = new UserVO();
         //利用反射获取字段名

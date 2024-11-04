@@ -1,15 +1,15 @@
 package cn.cola.user.service.impl
 
 import cn.cola.common.common.ErrorCode
+import cn.cola.common.constant.UserConstant
 import cn.cola.common.exception.ThrowUtils
+import cn.cola.common.utils.EncryptUtils
+import cn.cola.common.utils.JwtUtils
+import cn.cola.common.utils.MailUtils
 import cn.cola.service.user.model.entity.User
 import cn.cola.service.user.model.vo.UserVO
 import cn.cola.service.user.service.UserService
-import cn.cola.user.constant.UserConstant
 import cn.cola.user.repo.UserRepo
-import cn.cola.user.utils.EncryptUtils
-import cn.cola.user.utils.JwtUtils
-import cn.cola.user.utils.MailUtils
 import jakarta.annotation.Resource
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServletResponse
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
-
 
 
 @Service
@@ -70,7 +69,6 @@ class UserServiceImpl : UserService {
      * @param checkPassword 再次输入的确认密码
      * @param email         邮箱
      * @param code          验证码
-     * @param request       servlet请求对象，用于从session中获取正确的验证码
      * @return 注册结果
      */
     override fun register(
@@ -79,7 +77,6 @@ class UserServiceImpl : UserService {
         checkPassword: String,
         email: String,
         code: String,
-        request: HttpServletRequest
     ): String {
         // 验证邮箱是否合法
         ThrowUtils.throwIf(
@@ -184,7 +181,7 @@ class UserServiceImpl : UserService {
         val jwt = JwtUtils.generateToken(userVO)
 
         // 清除旧的jwt
-        val oldToken = request.cookies?.firstOrNull { it.name == "token" }
+        val oldToken = request.cookies?.firstOrNull { it.name == UserConstant.USER_LOGIN_STATE }
         if (oldToken != null) {
             oldToken.value = ""
             oldToken.maxAge = 0
@@ -192,11 +189,11 @@ class UserServiceImpl : UserService {
         }
 
         // 将jwt存入redis
-        redissonClient.getMapCache<String, String>("token")
+        redissonClient.getMapCache<String, String>(UserConstant.USER_LOGIN_STATE)
             .put(user.id.toString(), jwt, UserConstant.JWT_EXPIRE, TimeUnit.SECONDS)
 
         // 将jwt存入cookie
-        response.addCookie(Cookie("token", jwt))
+        response.addCookie(Cookie(UserConstant.USER_LOGIN_STATE, jwt))
 
         return userVO
     }
@@ -209,9 +206,9 @@ class UserServiceImpl : UserService {
      * @return 注销结果
      */
     override fun logout(request: HttpServletRequest, response: HttpServletResponse): String {
-        val oldToken = request.cookies?.firstOrNull { it.name == "token" }
+        val oldToken = request.cookies?.firstOrNull { it.name == UserConstant.USER_LOGIN_STATE }
         // 清除redis缓存
-        val tokenMap = redissonClient.getMapCache<String, String>("token")
+        val tokenMap = redissonClient.getMapCache<String, String>(UserConstant.USER_LOGIN_STATE)
         val userId = JwtUtils.verifyAndGetUserVO(oldToken?.value)
         tokenMap.remove(userId.toString())
         // 清除cookie
@@ -260,13 +257,20 @@ class UserServiceImpl : UserService {
     }
 
     /**
-     * 根据用户账号查询用户是否存在
-     *
-     * @param id 用户账号
-     * @return true：存在，false：不存在
+     * 验证登录状态
+     * @param token 登录token
+     * @return 验证结果
      */
-    override fun existsById(id: Long): Boolean {
-        return userRepo.existsById(id)
+    override fun validLoginStatus(token: String): Boolean {
+        // 验证token是否在redis缓存中
+        return redissonClient
+            .getMapCache<String, String>(UserConstant.USER_LOGIN_STATE)
+            .containsKey(
+                JwtUtils
+                    .verifyAndGetUserVO(token)
+                    .id
+                    .toString()
+            )
     }
 
     /**

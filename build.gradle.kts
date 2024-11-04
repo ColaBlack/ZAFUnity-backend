@@ -42,9 +42,17 @@ subprojects {
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         implementation("cn.hutool:hutool-all:5.8.26")
         implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.21")
-        implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-        implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")
+//        implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.5")
+//        implementation("org.springframework.cloud:spring-cloud-loadbalancer:3.1.5")
+//        implementation("com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway:2021.0.5.0")
+//        implementation("com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery:2021.0.5.0")
     }
+
+//    dependencyManagement {
+//        imports {
+//            mavenBom("com.alibaba.cloud:spring-cloud-alibaba-dependencies:2021.0.5.0")
+//        }
+//    }
 }
 
 tasks.withType<Test> {

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse
  *
  * @author ColaBlack
  */
+//@FeignClient(name = "user-service", path = "/api/user/inner")
 interface UserService {
 
     /**
@@ -32,7 +33,6 @@ interface UserService {
      * @param checkPassword 再次输入的确认密码
      * @param email         邮箱
      * @param code          验证码
-     * @param request       servlet请求对象，用于从session中获取正确的验证码
      * @return 注册结果
      */
     fun register(
@@ -41,7 +41,6 @@ interface UserService {
         checkPassword: String,
         email: String,
         code: String,
-        request: HttpServletRequest
     ): String
 
     /**
@@ -105,10 +104,9 @@ interface UserService {
     ): String
 
     /**
-     * 根据用户账号查询用户是否存在
-     *
-     * @param id 用户账号
-     * @return true：存在，false：不存在
+     * 验证登录状态
+     * @param token 登录token
+     * @return 验证结果
      */
-    fun existsById(id: Long): Boolean
+    fun validLoginStatus(token: String): Boolean
 }
