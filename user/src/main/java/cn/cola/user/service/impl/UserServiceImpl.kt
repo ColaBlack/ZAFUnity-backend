@@ -3,9 +3,9 @@ package cn.cola.user.service.impl
 import cn.cola.common.common.ErrorCode
 import cn.cola.common.constant.UserConstant
 import cn.cola.common.exception.ThrowUtils
-import cn.cola.common.utils.EncryptUtils
+import cn.cola.user.utils.EncryptUtils
 import cn.cola.common.utils.JwtUtils
-import cn.cola.common.utils.MailUtils
+import cn.cola.user.utils.MailUtils
 import cn.cola.service.user.model.entity.User
 import cn.cola.service.user.model.vo.UserVO
 import cn.cola.service.user.service.UserService
