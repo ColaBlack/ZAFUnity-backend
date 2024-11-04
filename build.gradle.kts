@@ -42,6 +42,8 @@ subprojects {
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         implementation("cn.hutool:hutool-all:5.8.26")
         implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.21")
+        implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+        implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")
     }
 }
 
