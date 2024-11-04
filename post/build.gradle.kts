@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":service"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(project(":user"))
+    implementation(project(":model"))
 }
 
 tasks.test {

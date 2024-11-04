@@ -1,4 +1,4 @@
-package cn.cola.service.post.model.dto
+package cn.cola.model.dto.post
 
 /**
  * 发布帖子DTO

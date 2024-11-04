@@ -1,7 +1,7 @@
 package cn.cola.common.utils;
 
 import cn.cola.common.constant.UserConstant;
-import cn.cola.service.user.model.vo.UserVO;
+import cn.cola.model.vo.UserVO;
 import cn.hutool.jwt.JWT;
 import io.micrometer.common.util.StringUtils;
 

@@ -15,6 +15,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(project(":service"))
     implementation(project(":common"))
+    implementation(project(":model"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-mail")

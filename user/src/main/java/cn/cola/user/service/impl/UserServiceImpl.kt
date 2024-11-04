@@ -7,8 +7,8 @@ import cn.cola.user.utils.EncryptUtils
 import cn.cola.common.utils.JwtUtils
 import cn.cola.user.utils.MailUtils
 import cn.cola.service.user.model.entity.User
-import cn.cola.service.user.model.vo.UserVO
-import cn.cola.service.user.service.UserService
+import cn.cola.model.vo.UserVO
+import cn.cola.service.UserService
 import cn.cola.user.repo.UserRepo
 import jakarta.annotation.Resource
 import jakarta.servlet.http.Cookie

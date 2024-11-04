@@ -1,7 +1,8 @@
-package cn.cola.service.post.service
+package cn.cola.service
 
-import cn.cola.service.post.model.vo.PostVO
+import cn.cola.model.vo.PostVO
 import org.springframework.data.domain.Page
+
 
 interface PostService {
     /**

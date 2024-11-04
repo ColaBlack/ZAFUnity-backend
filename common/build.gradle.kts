@@ -16,6 +16,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation(project(":service"))
+    implementation(project(":model"))
 }
 
 tasks.test {

@@ -1,6 +1,7 @@
-package cn.cola.service.post.model.vo;
+package cn.cola.model.vo;
 
-import cn.cola.service.post.model.entity.Post;
+
+import cn.cola.model.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
