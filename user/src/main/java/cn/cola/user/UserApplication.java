@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 //@EnableFeignClients
 @SpringBootApplication
 @ComponentScan(basePackages = {"cn.cola"})
-@EntityScan(basePackages = {"cn.cola.service.user.model.entity"})
+@EntityScan(basePackages = {"cn.cola.model.entity"})
 public class UserApplication {
 
     public static void main(String[] args) {
