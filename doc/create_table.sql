@@ -27,7 +27,7 @@ create table user
     user_id       bigint auto_increment comment '用户ID'
         primary key,
     user_account  varchar(50)                           not null comment '用户账号',
-    user_password varchar(50)                           not null comment '用户密码',
+    user_password varchar(256)                           not null comment '用户密码',
     email         varchar(50)                           not null comment '用户邮箱',
     user_role     varchar(20) default 'user'            not null comment '用户角色 user/admin/ban',
     user_avatar   varchar(200)                          null comment '用户头像',

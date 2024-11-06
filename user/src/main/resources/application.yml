@@ -23,3 +23,9 @@ server:
   port: 1222
   servlet:
     context-path: /api/user
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: is_delete
+      logic-delete-value: 1
+      logic-not-delete-value: 0
