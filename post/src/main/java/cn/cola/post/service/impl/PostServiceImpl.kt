@@ -6,25 +6,25 @@ import cn.cola.common.exception.ThrowUtils
 import cn.cola.model.entity.Post
 import cn.cola.model.vo.PostVO
 import cn.cola.post.constant.PostConst
-import cn.cola.post.repo.PostRepo
+import cn.cola.post.mapper.PostMapper
 import cn.cola.service.PostService
 import cn.hutool.json.JSONUtil
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import jakarta.annotation.Resource
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 
 @Service
-class PostServiceImpl : PostService {
+open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
 
     @Resource
-    private lateinit var postRepo: PostRepo
+    private lateinit var postMapper: PostMapper
 
     /**
      * 发布帖子
      */
-    override fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Long {
+    override fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Boolean {
         validPost(tags, title, content)
         ThrowUtils.throwIf(authorId <= 0, ErrorCode.PARAMS_ERROR, "作者ID异常")
 
@@ -33,9 +33,7 @@ class PostServiceImpl : PostService {
         post.content = content
         post.postTags = JSONUtil.toJsonStr(tags)
         post.createrId = authorId
-        val ret = postRepo.save(post).id
-        ThrowUtils.throwIf(ret == null, ErrorCode.SYSTEM_ERROR, "发布帖子失败")
-        return ret!!
+        return this.save(post)
     }
 
     /**
@@ -46,21 +44,27 @@ class PostServiceImpl : PostService {
      * @return 帖子列表
      */
     override fun searchPost(keywords: String, pageNum: Int, pageSize: Int): Page<PostVO> {
-        ThrowUtils.throwIf(keywords.isBlank(), ErrorCode.PARAMS_ERROR, "关键词不能为空")
+        val posts: Page<Post>
+        if (keywords.isBlank()) {
+            //分页查询所有帖子
+            posts = postMapper.findPostsByPage(pageNum, pageSize)
+        } else {
 
-        val searchPattern = "%$keywords%"
-        val posts = postRepo.findPostsByTitleIsLikeOrContentLikeOrPostTagsLike(
-            searchPattern,
-            searchPattern,
-            searchPattern,
-            PageRequest.of(pageNum, pageSize)
-        )
-
-        // 将帖子转化为PostVO的列表
-        posts.map { PostVO(it) }
-
-        // 返回Page对象时，保持与原posts的分页信息
-        return posts.map { PostVO(it) }
+            val searchPattern = "%$keywords%"
+            posts = postMapper.findPostsByTitleIsLikeOrContentLikeOrPostTagsLike(
+                searchPattern,
+                searchPattern,
+                searchPattern,
+                pageNum,
+                pageSize
+            )
+        }
+        //将Page<Post>转为Page<PostVO>
+        val ret = Page<PostVO>()
+        ret.total = posts.total
+        ret.pages = posts.pages
+        ret.records = posts.records.map { PostVO(it) }
+        return ret
     }
 
     /**
@@ -69,10 +73,10 @@ class PostServiceImpl : PostService {
      * @return 帖子详情
      */
     override fun getPostDetail(postId: Long): PostVO {
-        postRepo.findById(postId).orElseThrow {
+        postMapper.findPostById(postId).orElseThrow {
             BusinessException(ErrorCode.NOT_FOUND_ERROR, "帖子不存在")
         }
-        return PostVO(postRepo.findById(postId).get())
+        return PostVO(postMapper.findPostById(postId).get())
     }
 
 

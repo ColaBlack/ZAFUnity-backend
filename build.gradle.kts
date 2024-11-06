@@ -31,7 +31,10 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
 
     dependencies {
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+        // https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
+        implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3")
+        implementation("com.baomidou:mybatis-plus-spring-boot3-starter:3.5.9")
+//        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-web")
         developmentOnly("org.springframework.boot:spring-boot-devtools")
         runtimeOnly("com.mysql:mysql-connector-j")
@@ -42,6 +45,7 @@ subprojects {
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         implementation("cn.hutool:hutool-all:5.8.26")
         implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.21")
+        implementation("com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:4.4.0")
 //        implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.5")
 //        implementation("org.springframework.cloud:spring-cloud-loadbalancer:3.1.5")
 //        implementation("com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway:2021.0.5.0")

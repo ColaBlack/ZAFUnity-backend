@@ -3,9 +3,8 @@ package cn.cola.model.vo;
 
 import cn.cola.model.entity.User;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * 用户VO
@@ -14,12 +13,10 @@ import java.time.LocalDate;
  */
 @Data
 public class UserVO {
-    private User user;
-
     /**
      * 用户ID
      */
-    private Long id;
+    private Long userId;
 
     /**
      * 用户账号
@@ -54,7 +51,7 @@ public class UserVO {
     /**
      * 用户生日
      */
-    private LocalDate userBirthday;
+    private Date userBirthday;
 
     /**
      * 用户年级
@@ -72,8 +69,29 @@ public class UserVO {
     private String userTags;
 
     public UserVO(User user) {
-        this.user = user;
-        BeanUtils.copyProperties(user, this);
+        Long userId = user.getUserId();
+        String userAccount = user.getUserAccount();
+        String email = user.getEmail();
+        String userRole = user.getUserRole();
+        String userAvatar = user.getUserAvatar();
+        String userNickname = user.getUserNickname();
+        String userGender = user.getUserGender();
+        Date userBirthday = user.getUserBirthday();
+        String userGrade = user.getUserGrade();
+        String userProfile = user.getUserProfile();
+        String userTags = user.getUserTags();
+        this.setUserId(userId);
+        this.setUserAccount(userAccount);
+        this.setEmail(email);
+        this.setUserRole(userRole);
+        this.setUserAvatar(userAvatar);
+        this.setUserNickname(userNickname);
+        this.setUserGender(userGender);
+        this.setUserBirthday(userBirthday);
+        this.setUserGrade(userGrade);
+        this.setUserProfile(userProfile);
+        this.setUserTags(userTags);
+
     }
 
     public UserVO() {

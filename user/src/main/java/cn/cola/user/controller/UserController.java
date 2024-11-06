@@ -4,6 +4,7 @@ import cn.cola.common.common.BaseResponse;
 import cn.cola.common.common.ErrorCode;
 import cn.cola.common.common.ResultUtils;
 import cn.cola.common.constant.UserConstant;
+import cn.cola.common.exception.BusinessException;
 import cn.cola.common.exception.ThrowUtils;
 import cn.cola.common.utils.JwtUtils;
 import cn.cola.model.dto.user.LoginDTO;
@@ -11,17 +12,19 @@ import cn.cola.model.dto.user.RegisterDTO;
 import cn.cola.model.vo.UserVO;
 import cn.cola.service.UserService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.HttpCookie;
+import java.util.Arrays;
 
 /**
  * 用户控制器
  *
  * @author ColaBlack
  */
+@CrossOrigin(origins = {"http://localhost:5173"}, methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true")
 @RestController
 public class UserController {
 
@@ -78,11 +81,15 @@ public class UserController {
      * 获取登录用户信息
      */
     @GetMapping("/get/UserVO")
-    public BaseResponse<UserVO> getUserVO(
-            @CookieValue(value = UserConstant.USER_LOGIN_STATE)
-            HttpCookie cookie) {
+    public BaseResponse<UserVO> getUserVO(HttpServletRequest request) {
+        Cookie cookie = Arrays.stream(request.getCookies())
+                .filter(
+                        c -> c.getName()
+                                .equals(UserConstant.USER_LOGIN_STATE))
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_LOGIN_ERROR, "请先登录"));
         ThrowUtils.throwIf(
-                cookie == null || userService.validLoginStatus(cookie.getValue()),
+                cookie == null || !userService.validLoginStatus(cookie.getValue()),
                 ErrorCode.NOT_LOGIN_ERROR,
                 "请先登录");
         UserVO ret = JwtUtils.verifyAndGetUserVO(cookie.getValue());

@@ -7,9 +7,10 @@ import cn.cola.common.utils.JwtUtils
 import cn.cola.model.entity.User
 import cn.cola.model.vo.UserVO
 import cn.cola.service.UserService
-import cn.cola.user.repo.UserRepo
+import cn.cola.user.mapper.UserMapper
 import cn.cola.user.utils.EncryptUtils
 import cn.cola.user.utils.MailUtils
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import jakarta.annotation.Resource
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
@@ -20,13 +21,16 @@ import java.util.concurrent.TimeUnit
 
 
 @Service
-class UserServiceImpl : UserService {
+open class UserServiceImpl : UserService, ServiceImpl<UserMapper, User>() {
 
     @Resource
     private lateinit var redissonClient: RedissonClient
 
     @Resource
-    private lateinit var userRepo: UserRepo
+    private lateinit var userMapper: UserMapper
+
+    @Resource
+    private lateinit var mailUtils: MailUtils
 
     /**
      * 发送验证码服务
@@ -42,19 +46,15 @@ class UserServiceImpl : UserService {
 
         // 验证账号是否合法
         ThrowUtils.throwIf(
-            userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "账号不合法"
+            !userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()), ErrorCode.PARAMS_ERROR, "账号不合法"
         )
         // 验证邮箱是否合法
         ThrowUtils.throwIf(
-            email.matches(UserConstant.EMAIL_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "邮箱不合法"
+            !email.matches(UserConstant.EMAIL_REGEX.toRegex()), ErrorCode.PARAMS_ERROR, "邮箱不合法"
         )
 
         // 生成验证码并发送至邮箱
-        val verificationCode = MailUtils.sendVerificationCode(email)
+        val verificationCode = mailUtils.sendVerificationCode(email)
 
         // 将验证码存入redis缓存
         mapCache.put(email, verificationCode, 10, TimeUnit.MINUTES)
@@ -80,41 +80,29 @@ class UserServiceImpl : UserService {
     ): String {
         // 验证邮箱是否合法
         ThrowUtils.throwIf(
-            email.matches(UserConstant.EMAIL_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "邮箱不合法"
+            !email.matches(UserConstant.EMAIL_REGEX.toRegex()), ErrorCode.PARAMS_ERROR, "邮箱不合法"
         )
 
         // 从redis缓存中查看验证码是否正确
         val mapCache = redissonClient.getMapCache<String, Int>("code")
         ThrowUtils.throwIf(
-            !mapCache.containsKey(email),
-            ErrorCode.FORBIDDEN_ERROR,
-            "验证码不存在或已过期"
+            !mapCache.containsKey(email), ErrorCode.FORBIDDEN_ERROR, "验证码不存在或已过期"
         )
         ThrowUtils.throwIf(
-            mapCache[email] != code.toInt(),
-            ErrorCode.FORBIDDEN_ERROR,
-            "验证码错误"
+            mapCache[email] != code.toInt(), ErrorCode.FORBIDDEN_ERROR, "验证码错误"
         )
 
         // 验证账号是否合法
         ThrowUtils.throwIf(
-            userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "账号不合法"
+            !userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()), ErrorCode.PARAMS_ERROR, "账号不合法"
         )
         // 验证密码是否合法
         ThrowUtils.throwIf(
-            !password.matches(UserConstant.PASSWORD_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "密码不合法"
+            !password.matches(UserConstant.PASSWORD_REGEX.toRegex()), ErrorCode.PARAMS_ERROR, "密码不合法"
         )
         // 验证确认密码是否正确
         ThrowUtils.throwIf(
-            password != checkPassword,
-            ErrorCode.PARAMS_ERROR,
-            "两次输入的密码不一致"
+            password != checkPassword, ErrorCode.PARAMS_ERROR, "两次输入的密码不一致"
         )
 
         val encryptedPassword = EncryptUtils.encryptPassword(password)
@@ -129,12 +117,10 @@ class UserServiceImpl : UserService {
             if (lock.tryLock(10, 30, TimeUnit.SECONDS)) {
                 // 验证账号是否已存在
                 ThrowUtils.throwIf(
-                    userRepo.existsByUserAccount(userAccount),
-                    ErrorCode.PARAMS_ERROR,
-                    "账号已存在"
+                    userMapper.existsByUserAccount(userAccount), ErrorCode.PARAMS_ERROR, "账号已存在"
                 )
 
-                userRepo.save(user)
+                this.save(user)
             } else {
                 // 获取锁失败，可以抛出异常或返回错误
                 throw Exception("获取锁失败，请稍后重试")
@@ -161,16 +147,13 @@ class UserServiceImpl : UserService {
      * @return 登录结果
      */
     override fun login(
-        userAccount: String,
-        password: String,
-        request: HttpServletRequest,
-        response: HttpServletResponse
+        userAccount: String, password: String, request: HttpServletRequest, response: HttpServletResponse
     ): UserVO {
         validLoginParam(userAccount, password)
 
         val encryptedPassword = EncryptUtils.encryptPassword(password)
 
-        val user = userRepo.findByUserAccountAndUserPassword(userAccount, encryptedPassword)
+        val user = userMapper.findByUserAccountAndUserPassword(userAccount, encryptedPassword)
 
         if (user == null) {
             ThrowUtils.throwIf(true, ErrorCode.FORBIDDEN_ERROR, "账号或密码错误")
@@ -190,7 +173,7 @@ class UserServiceImpl : UserService {
 
         // 将jwt存入redis
         redissonClient.getMapCache<String, String>(UserConstant.USER_LOGIN_STATE)
-            .put(user.id.toString(), jwt, UserConstant.JWT_EXPIRE, TimeUnit.SECONDS)
+            .put(user.userId.toString(), jwt, UserConstant.JWT_EXPIRE, TimeUnit.SECONDS)
 
         // 将jwt存入cookie
         response.addCookie(Cookie(UserConstant.USER_LOGIN_STATE, jwt))
@@ -229,9 +212,7 @@ class UserServiceImpl : UserService {
      * @return 修改结果
      */
     override fun modifyPassword(
-        oldPassword: String,
-        newPassword: String,
-        request: HttpServletRequest
+        oldPassword: String, newPassword: String, request: HttpServletRequest
     ): String {
         TODO("Not yet implemented")
     }
@@ -247,11 +228,7 @@ class UserServiceImpl : UserService {
      * @return 忘记密码结果
      */
     override fun forgetPassword(
-        userAccount: String,
-        email: String,
-        code: String,
-        password: String,
-        request: HttpServletRequest
+        userAccount: String, email: String, code: String, password: String, request: HttpServletRequest
     ): String {
         TODO("Not yet implemented")
     }
@@ -263,14 +240,12 @@ class UserServiceImpl : UserService {
      */
     override fun validLoginStatus(token: String): Boolean {
         // 验证token是否在redis缓存中
-        return redissonClient
-            .getMapCache<String, String>(UserConstant.USER_LOGIN_STATE)
-            .containsKey(
-                JwtUtils
-                    .verifyAndGetUserVO(token)
-                    .id
-                    .toString()
-            )
+        return redissonClient.getMapCache<String, String>(UserConstant.USER_LOGIN_STATE).containsKey(
+            JwtUtils
+                .verifyAndGetUserVO(token)
+                .userId
+                .toString()
+        )
     }
 
     /**
@@ -281,15 +256,11 @@ class UserServiceImpl : UserService {
     private fun validLoginParam(userAccount: String, password: String) {
         // 验证账号是否合法
         ThrowUtils.throwIf(
-            userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "账号不合法"
+            !userAccount.matches(UserConstant.ACCOUNT_REGEX.toRegex()), ErrorCode.PARAMS_ERROR, "账号不合法"
         )
         // 验证密码是否合法
         ThrowUtils.throwIf(
-            !password.matches(UserConstant.PASSWORD_REGEX.toRegex()),
-            ErrorCode.PARAMS_ERROR,
-            "密码不合法"
+            !password.matches(UserConstant.PASSWORD_REGEX.toRegex()), ErrorCode.PARAMS_ERROR, "密码不合法"
         )
     }
 }

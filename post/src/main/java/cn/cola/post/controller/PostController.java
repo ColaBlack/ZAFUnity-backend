@@ -11,8 +11,8 @@ import cn.cola.model.vo.PostVO;
 import cn.cola.model.vo.UserVO;
 import cn.cola.service.PostService;
 import cn.cola.service.UserService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.List;
  *
  * @author ColaBlack
  */
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class PostController {
 
@@ -35,16 +36,16 @@ public class PostController {
      * 发布帖子
      */
     @PostMapping("/publish")
-    public BaseResponse<Long> publishPost(@RequestBody PublishPostDTO publishPostDTO,
-                                          @CookieValue(value = UserConstant.USER_LOGIN_STATE) String token) {
+    public BaseResponse<Boolean> publishPost(@RequestBody PublishPostDTO publishPostDTO,
+                                             @CookieValue(value = UserConstant.USER_LOGIN_STATE) String token) {
         UserVO userVO = JwtUtils.verifyAndGetUserVO(token);
         ThrowUtils.throwIf(userService.validLoginStatus(token), ErrorCode.NOT_LOGIN_ERROR);
         ThrowUtils.throwIf(userVO == null, ErrorCode.NOT_LOGIN_ERROR);
-        Long authorId = userVO.getId();
+        Long authorId = userVO.getUserId();
         String title = publishPostDTO.getTitle();
         String content = publishPostDTO.getContent();
         List<String> tags = publishPostDTO.getTags();
-        Long ret = postService.publishPost(tags, title, content, authorId);
+        boolean ret = postService.publishPost(tags, title, content, authorId);
         return ResultUtils.success(ret);
     }
 
@@ -52,7 +53,7 @@ public class PostController {
      * 搜索帖子
      */
     @GetMapping("/search")
-    public BaseResponse<Page<PostVO>> searchPost(@RequestParam(value = "keyword") String keyword,
+    public BaseResponse<Page<PostVO>> searchPost(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                                  @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         ThrowUtils.throwIf(page < 1, ErrorCode.PARAMS_ERROR, "页码不能小于1");

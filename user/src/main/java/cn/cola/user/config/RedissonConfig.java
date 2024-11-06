@@ -17,14 +17,14 @@ public class RedissonConfig {
 //    @Value("${spring.redis.password}")
 //    private String password;
 
-//    @Value("${spring.redis.host}")
-    private String host="localhost";
+    //    @Value("${spring.redis.host}")
+    private String host = "localhost";
 
-//    @Value("${spring.redis.port}")
-    private int port=6379;
+    //    @Value("${spring.redis.port}")
+    private int port = 6379;
 
-//    @Value("${spring.redis.database}")
-    private int database=0;
+    //    @Value("${spring.redis.database}")
+    private int database = 0;
 
     @Bean
     public RedissonClient redisson() {

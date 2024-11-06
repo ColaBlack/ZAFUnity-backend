@@ -2,12 +2,13 @@ package cn.cola.model.vo;
 
 
 import cn.cola.model.entity.Post;
+import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,7 +62,22 @@ public class PostVO {
     private Instant updateTime;
 
     public PostVO(Post post) {
-        BeanUtils.copyProperties(post, this);
+        Long postId = post.getPostId();
+        String title = post.getTitle();
+        String content = post.getContent();
+        Long createrId = post.getCreaterId();
+        Integer starts = post.getStarts();
+        String postTags = post.getPostTags();
+        Date createTime = post.getCreateTime();
+        Date updateTime = post.getUpdateTime();
+        this.setId(postId);
+        this.setTitle(title);
+        this.setContent(content);
+        this.setCreaterId(createrId);
+        this.setStarts(starts);
+        this.setPostTags(JSONUtil.toList(postTags, String.class));
+        this.setCreateTime(createTime.toInstant());
+        this.setUpdateTime(updateTime.toInstant());
     }
 
 

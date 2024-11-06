@@ -1,14 +1,13 @@
 package cn.cola.service
 
 import cn.cola.model.vo.PostVO
-import org.springframework.data.domain.Page
-
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page
 
 interface PostService {
     /**
      * 发布帖子
      */
-    fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Long
+    fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Boolean
 
     /**
      * 搜索帖子
