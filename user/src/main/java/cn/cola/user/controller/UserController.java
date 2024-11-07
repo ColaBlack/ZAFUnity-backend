@@ -25,7 +25,6 @@ import java.util.Arrays;
  *
  * @author ColaBlack
  */
-@CrossOrigin(origins = {"http://localhost:5173"}, methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true")
 @RestController
 public class UserController {
 

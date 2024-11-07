@@ -22,7 +22,6 @@ import java.util.List;
  *
  * @author ColaBlack
  */
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class PostController {
 
