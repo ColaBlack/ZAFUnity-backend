@@ -68,7 +68,7 @@ public class AiUtils {
                 .build();
 
         ModelApiResponse invokeModelApiResp = client.invokeModelApi(chatCompletionRequest);
-        return invokeModelApiResp.getData().getChoices().get(0).getMessage().getContent().toString();
+        return invokeModelApiResp.getData().getChoices().getFirst().getMessage().getContent().toString();
     }
 
     /**

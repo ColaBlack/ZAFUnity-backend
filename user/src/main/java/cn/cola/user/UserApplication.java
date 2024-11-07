@@ -10,8 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
  *
  * @author ColaBlack
  */
-//@EnableDiscoveryClient
-//@EnableFeignClients
 @SpringBootApplication
 @ComponentScan(basePackages = {"cn.cola"})
 @MapperScan("cn.cola.user.mapper")

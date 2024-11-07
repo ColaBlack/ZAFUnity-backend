@@ -19,6 +19,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("com.sun.mail:javax.mail:1.6.2")
     // https://mvnrepository.com/artifact/org.redisson/redisson
     implementation("org.redisson:redisson:3.37.0")
 }

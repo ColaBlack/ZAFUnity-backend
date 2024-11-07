@@ -12,15 +12,17 @@ import cn.cola.user.utils.EncryptUtils
 import cn.cola.user.utils.MailUtils
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
 import jakarta.annotation.Resource
-import jakarta.servlet.http.Cookie
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
+import org.apache.dubbo.config.annotation.DubboService
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
+import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 
 @Service
+@DubboService
 open class UserServiceImpl : UserService, ServiceImpl<UserMapper, User>() {
 
     @Resource

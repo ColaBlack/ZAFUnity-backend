@@ -1,7 +1,7 @@
 package cn.cola.common.aop;
 
 
-import jakarta.servlet.http.HttpServletRequest;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -13,8 +13,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 请求响应日志 AOP
@@ -42,7 +44,10 @@ public class LogInterceptor {
         String url = httpServletRequest.getRequestURI();
         // 获取请求参数
         Object[] args = point.getArgs();
-        String reqParam = "[" + StringUtils.join(Arrays.toString(args), ", ") + "]";
+        String reqParam = "[" + StringUtils.join(Arrays.stream(args)
+                .map(Object::toString)
+                .collect(Collectors.toList()), ',') + "]";
+
         // 输出请求日志
         log.info("request start，id: {}, path: {}, ip: {}, params: {}", requestId, url,
                 httpServletRequest.getRemoteHost(), reqParam);

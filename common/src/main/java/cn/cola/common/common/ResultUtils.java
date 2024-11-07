@@ -1,6 +1,8 @@
 package cn.cola.common.common;
 
 
+import jakarta.validation.constraints.Null;
+
 /**
  * 返回工具类
  *
@@ -22,22 +24,12 @@ public class ResultUtils {
     /**
      * 请求失败返回工具
      *
-     * @param errorCode 错误码
-     * @return 失败返回的结果
-     */
-    public static BaseResponse error(ErrorCode errorCode) {
-        return new BaseResponse<>(errorCode);
-    }
-
-    /**
-     * 请求失败返回工具
-     *
      * @param code    错误码
      * @param message 错误信息
      * @return 失败返回的结果
      */
-    public static BaseResponse error(int code, String message) {
-        return new BaseResponse(code, null, message);
+    public static BaseResponse<Null> error(int code, String message) {
+        return new BaseResponse<>(code, null, message);
     }
 
     /**
@@ -47,7 +39,7 @@ public class ResultUtils {
      * @param message   错误信息
      * @return 失败返回的结果
      */
-    public static BaseResponse error(ErrorCode errorCode, String message) {
-        return new BaseResponse(errorCode.getCode(), null, message);
+    public static BaseResponse<Null> error(ErrorCode errorCode, String message) {
+        return new BaseResponse<>(errorCode.getCode(), null, message);
     }
 }
