@@ -62,6 +62,6 @@ public interface UserConstant {
     /**
      * jwt过期时间（秒）：7 天
      */
-    long JWT_EXPIRE = 7 * 24 * 60 * 60;
+    long JWT_EXPIRE = 2592000;
 
 }
