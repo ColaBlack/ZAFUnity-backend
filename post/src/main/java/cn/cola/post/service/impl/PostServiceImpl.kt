@@ -1,0 +1,99 @@
+package cn.cola.post.service.impl
+
+import cn.cola.common.common.ErrorCode
+import cn.cola.common.exception.BusinessException
+import cn.cola.common.exception.ThrowUtils
+import cn.cola.model.entity.Post
+import cn.cola.model.vo.PostVO
+import cn.cola.post.constant.PostConst
+import cn.cola.post.mapper.PostMapper
+import cn.cola.service.PostService
+import cn.hutool.json.JSONUtil
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl
+import jakarta.annotation.Resource
+import org.springframework.stereotype.Service
+
+
+@Service
+open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
+
+    @Resource
+    private lateinit var postMapper: PostMapper
+
+    /**
+     * 发布帖子
+     */
+    override fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Boolean {
+        validPost(tags, title, content)
+        ThrowUtils.throwIf(authorId <= 0, ErrorCode.PARAMS_ERROR, "作者ID异常")
+
+        val post = Post()
+        post.title = title
+        post.content = content
+        post.postTags = JSONUtil.toJsonStr(tags)
+        post.createrId = authorId
+        return this.save(post)
+    }
+
+    /**
+     * 搜索帖子
+     * @param keywords 关键字
+     * @param pageNum 页码
+     * @param pageSize 每页大小
+     * @return 帖子列表
+     */
+    override fun searchPost(keywords: String, pageNum: Int, pageSize: Int): Page<PostVO> {
+        val posts: Page<Post>
+        if (keywords.isBlank()) {
+            //分页查询所有帖子
+            posts = postMapper.findPostsByPage(pageNum, pageSize)
+        } else {
+
+            val searchPattern = "%$keywords%"
+            posts = postMapper.findPostsByTitleIsLikeOrContentLikeOrPostTagsLike(
+                searchPattern,
+                searchPattern,
+                searchPattern,
+                pageNum,
+                pageSize
+            )
+        }
+        //将Page<Post>转为Page<PostVO>
+        val ret = Page<PostVO>()
+        ret.total = posts.total
+        ret.pages = posts.pages
+        ret.records = posts.records.map { PostVO(it) }
+        return ret
+    }
+
+    /**
+     * 获取帖子详情
+     * @param postId 帖子ID
+     * @return 帖子详情
+     */
+    override fun getPostDetail(postId: Long): PostVO {
+        postMapper.findPostById(postId).orElseThrow {
+            BusinessException(ErrorCode.NOT_FOUND_ERROR, "帖子不存在")
+        }
+        return PostVO(postMapper.findPostById(postId).get())
+    }
+
+
+    /**
+     * 验证帖子参数
+     * @param tags 标签列表
+     * @param title 标题
+     * @param content 内容
+     */
+    private fun validPost(tags: List<String>, title: String, content: String) {
+        tags.forEach { tag ->
+            ThrowUtils.throwIf(tag.isBlank(), ErrorCode.PARAMS_ERROR, "标签不能为空")
+            ThrowUtils.throwIf(tag.length > PostConst.POST_TAG_MAX_LENGTH, ErrorCode.PARAMS_ERROR, "标签太长")
+        }
+        ThrowUtils.throwIf(title.isBlank(), ErrorCode.PARAMS_ERROR, "标题不能为空")
+        ThrowUtils.throwIf(title.length > PostConst.POST_TITLE_MAX_LENGTH, ErrorCode.PARAMS_ERROR, "标题太长")
+        ThrowUtils.throwIf(content.isBlank(), ErrorCode.PARAMS_ERROR, "内容不能为空")
+        ThrowUtils.throwIf(content.length > PostConst.POST_CONTENT_MAX_LENGTH, ErrorCode.PARAMS_ERROR, "内容太长")
+    }
+}
