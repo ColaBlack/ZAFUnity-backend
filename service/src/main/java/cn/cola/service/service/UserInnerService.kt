@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping
  *
  * @author ColaBlack
  */
-@FeignClient(name = "user-service", path = "/api/user/inner")
+@FeignClient(name = "user-service-provider", path = "/api/user/inner")
 interface UserInnerService {
 
     /**

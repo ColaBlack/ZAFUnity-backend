@@ -6,10 +6,10 @@ import com.zhipu.oapi.ClientV4;
 import com.zhipu.oapi.Constants;
 import com.zhipu.oapi.service.v4.model.*;
 import io.reactivex.Flowable;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +68,7 @@ public class AiUtils {
                 .build();
 
         ModelApiResponse invokeModelApiResp = client.invokeModelApi(chatCompletionRequest);
-        return invokeModelApiResp.getData().getChoices().getFirst().getMessage().getContent().toString();
+        return invokeModelApiResp.getData().getChoices().get(0).getMessage().getContent().toString();
     }
 
     /**

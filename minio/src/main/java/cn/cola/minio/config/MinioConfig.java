@@ -1,9 +1,10 @@
 package cn.cola.minio.config;
 
 import io.minio.MinioClient;
-import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.Resource;
 
 /**
  * minio配置类
