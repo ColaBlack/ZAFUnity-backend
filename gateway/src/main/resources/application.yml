@@ -36,3 +36,7 @@ server:
   port: 1221
   servlet:
     context-path: /api/gateway
+    session:
+      cookie:
+        path: /api
+        max-age: 2592000

@@ -20,6 +20,10 @@ server:
   port: 1223
   servlet:
     context-path: /api/post
+    session:
+      cookie:
+        path: /api
+        max-age: 2592000
 mybatis-plus:
   global-config:
     db-config:
