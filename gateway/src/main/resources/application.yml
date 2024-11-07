@@ -20,26 +20,3 @@ server:
   port: 1221
   servlet:
     context-path: /api/gateway
-
-## 聚合文档
-#knife4j:
-#  gateway:
-#    enabled: true
-#    tags-sorter: order
-#    operations-sorter: order
-#    # 指定手动配置的模式
-#    strategy: manual
-#    routes:
-#      - name: 用户服务
-#        # 真实子服务访问url地址-提供OpenAPI的文档
-#        url: /user/v2/api-docs?group=default
-#        service-name: user
-#        # 路由前缀
-#        context-path: /api/user
-#        order: 2
-#      - name: 帖子服务
-#        url: /post/v2/api-docs?group=default
-#        service-name: order-service
-#        # 路由前缀
-#        context-path: /api/post
-#        order: 3
