@@ -176,8 +176,10 @@ open class UserServiceImpl : UserService, ServiceImpl<UserMapper, User>() {
             .put(user.userId.toString(), jwt, UserConstant.JWT_EXPIRE, TimeUnit.SECONDS)
 
         // 将jwt存入cookie
-        response.addCookie(Cookie(UserConstant.USER_LOGIN_STATE, jwt))
-
+        val cookie = Cookie(UserConstant.USER_LOGIN_STATE, jwt)
+        cookie.path = "/api"
+        cookie.isHttpOnly = true
+        response.addCookie(cookie)
         return userVO
     }
 

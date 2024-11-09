@@ -1,7 +1,6 @@
 package cn.cola.post.service
 
 import cn.cola.model.vo.PostVO
-import com.baomidou.mybatisplus.plugins.Page
 
 interface PostService {
     /**
@@ -16,7 +15,7 @@ interface PostService {
      * @param pageSize 每页大小
      * @return 帖子列表
      */
-    fun searchPost(keywords: String, pageNum: Int, pageSize: Int): Page<PostVO>
+    fun searchPost(keywords: String?, pageNum: Int, pageSize: Int): List<PostVO>
 
     /**
      * 获取帖子详情

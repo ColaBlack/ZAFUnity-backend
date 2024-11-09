@@ -91,8 +91,9 @@ public class UserController {
                                 .equals(UserConstant.USER_LOGIN_STATE))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_LOGIN_ERROR, "请先登录"));
+        Boolean hasPassVaild = userInnerService.validLoginStatus(cookie.getValue()).getData();
         ThrowUtils.throwIf(
-                cookie == null || !userInnerService.validLoginStatus(cookie.getValue()),
+                hasPassVaild == null || !hasPassVaild,
                 ErrorCode.NOT_LOGIN_ERROR,
                 "请先登录");
         UserVO ret = JwtUtils.verifyAndGetUserVO(cookie.getValue());

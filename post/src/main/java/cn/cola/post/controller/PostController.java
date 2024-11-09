@@ -38,7 +38,9 @@ public class PostController {
     public BaseResponse<Boolean> publishPost(@RequestBody PublishPostDTO publishPostDTO,
                                              @CookieValue(value = UserConstant.USER_LOGIN_STATE) String token) {
         UserVO userVO = JwtUtils.verifyAndGetUserVO(token);
-        ThrowUtils.throwIf(userInnerService.validLoginStatus(token), ErrorCode.NOT_LOGIN_ERROR);
+        BaseResponse<Boolean> res = userInnerService.validLoginStatus(token);
+        Boolean hasPassValid = res.getData();
+        ThrowUtils.throwIf(hasPassValid == null || !hasPassValid, ErrorCode.NOT_LOGIN_ERROR);
         ThrowUtils.throwIf(userVO == null, ErrorCode.NOT_LOGIN_ERROR);
         Long authorId = userVO.getUserId();
         String title = publishPostDTO.getTitle();

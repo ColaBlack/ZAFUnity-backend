@@ -2,10 +2,10 @@ package cn.cola.post.mapper;
 
 import cn.cola.model.entity.Post;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -25,17 +25,21 @@ public interface PostMapper extends BaseMapper<Post> {
      * @return 分页结果
      */
     @Select("SELECT * FROM post WHERE title LIKE CONCAT('%', #{title}, '%') OR content LIKE CONCAT('%', #{content}, '%') OR post_tags LIKE CONCAT('%', #{postTags}, '%') LIMIT #{page}, #{size}")
-    Page<Post> findPostsByTitleIsLikeOrContentLikeOrPostTagsLike(String title, String content, String postTags, int page, int size);
+    List<Post> findPostsByTitleIsLikeOrContentLikeOrPostTagsLike(@Param("title") String title,
+                                                                 @Param("content") String content,
+                                                                 @Param("postTags") String postTags,
+                                                                 @Param("page") int page,
+                                                                 @Param("size") int size);
 
     /**
      * 分页查询所有帖子
      *
-     * @param page 页码
-     * @param size 页大小
+     * @param pageNum  页码
+     * @param pageSize 页大小
      * @return 分页结果
      */
-    @Select("SELECT * FROM post LIMIT #{page}, #{size}")
-    Page<Post> findPostsByPage(int page, int size);
+    @Select("SELECT * FROM post LIMIT #{pageNum}, #{pageSize}")
+    List<Post> findPostsByPage(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);
 
     /**
      * 按帖子ID查询帖子
@@ -44,7 +48,7 @@ public interface PostMapper extends BaseMapper<Post> {
      * @return 帖子
      */
     @Select("SELECT * FROM post WHERE post_id = #{id}")
-    Optional<Post> findPostById(Long id);
+    Post findPostById(@Param("id") Long id);
 }
 
 

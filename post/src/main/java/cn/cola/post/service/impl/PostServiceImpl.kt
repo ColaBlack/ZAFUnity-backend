@@ -1,7 +1,6 @@
 package cn.cola.post.service.impl
 
 import cn.cola.common.common.ErrorCode
-import cn.cola.common.exception.BusinessException
 import cn.cola.common.exception.ThrowUtils
 import cn.cola.model.entity.Post
 import cn.cola.model.vo.PostVO
@@ -9,7 +8,6 @@ import cn.cola.post.constant.PostConst
 import cn.cola.post.mapper.PostMapper
 import cn.cola.post.service.PostService
 import cn.hutool.json.JSONUtil
-import com.baomidou.mybatisplus.plugins.Page
 import com.baomidou.mybatisplus.service.impl.ServiceImpl
 import org.springframework.stereotype.Service
 import javax.annotation.Resource
@@ -43,9 +41,9 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
      * @param pageSize 每页大小
      * @return 帖子列表
      */
-    override fun searchPost(keywords: String, pageNum: Int, pageSize: Int): Page<PostVO> {
-        val posts: Page<Post>
-        if (keywords.isBlank()) {
+    override fun searchPost(keywords: String?, pageNum: Int, pageSize: Int): List<PostVO> {
+        val posts: List<Post>
+        if (keywords.isNullOrBlank()) {
             //分页查询所有帖子
             posts = postMapper.findPostsByPage(pageNum, pageSize)
         } else {
@@ -59,10 +57,7 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
                 pageSize
             )
         }
-        //将Page<Post>转为Page<PostVO>
-        val ret = Page<PostVO>(pageNum, pageSize)
-        ret.records = posts.records.map { PostVO(it) }
-        return ret
+        return posts.map { PostVO(it) }
     }
 
     /**
@@ -71,10 +66,7 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
      * @return 帖子详情
      */
     override fun getPostDetail(postId: Long): PostVO {
-        postMapper.findPostById(postId).orElseThrow {
-            BusinessException(ErrorCode.NOT_FOUND_ERROR, "帖子不存在")
-        }
-        return PostVO(postMapper.findPostById(postId).get())
+        return PostVO(postMapper.findPostById(postId))
     }
 
 

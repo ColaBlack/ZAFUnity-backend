@@ -2,6 +2,7 @@ package cn.cola.user.mapper;
 
 import cn.cola.model.entity.User;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -19,7 +20,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @return true：存在，false：不存在
      */
     @Select("SELECT COUNT(*) FROM user WHERE user_account = #{userAccount}")
-    boolean existsByUserAccount(String userAccount);
+    boolean existsByUserAccount(@Param("userAccount") String userAccount);
 
     /**
      * 根据用户账号和密码查询用户
@@ -29,7 +30,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 用户实体，为空表示用户不存在或密码错误
      */
     @Select("SELECT * FROM user WHERE user_account = #{userAccount} AND user_password = #{userPassword}")
-    User findByUserAccountAndUserPassword(String userAccount, String userPassword);
+    User findByUserAccountAndUserPassword(@Param("userAccount") String userAccount, @Param("userPassword") String userPassword);
 
 }
 
