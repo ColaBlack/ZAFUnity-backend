@@ -20,26 +20,26 @@ public interface PostMapper extends BaseMapper<Post> {
      * @param title    标题
      * @param content  内容
      * @param postTags 标签
-     * @param page     页码
+     * @param offset   偏移量
      * @param size     页大小
      * @return 分页结果
      */
-    @Select("SELECT * FROM post WHERE title LIKE CONCAT('%', #{title}, '%') OR content LIKE CONCAT('%', #{content}, '%') OR post_tags LIKE CONCAT('%', #{postTags}, '%') LIMIT #{page}, #{size}")
+    @Select("SELECT * FROM post WHERE title LIKE CONCAT('%', #{title}, '%') OR content LIKE CONCAT('%', #{content}, '%') OR post_tags LIKE CONCAT('%', #{postTags}, '%') LIMIT #{offset}, #{size}")
     List<Post> findPostsByTitleIsLikeOrContentLikeOrPostTagsLike(@Param("title") String title,
                                                                  @Param("content") String content,
                                                                  @Param("postTags") String postTags,
-                                                                 @Param("page") int page,
+                                                                 @Param("offset") int offset,
                                                                  @Param("size") int size);
 
     /**
      * 分页查询所有帖子
      *
-     * @param pageNum  页码
+     * @param offset   偏移量
      * @param pageSize 页大小
      * @return 分页结果
      */
-    @Select("SELECT * FROM post LIMIT #{pageNum}, #{pageSize}")
-    List<Post> findPostsByPage(@Param("pageNum") int pageNum, @Param("pageSize") int pageSize);
+    @Select("SELECT * FROM post LIMIT #{offset}, #{pageSize}")
+    List<Post> findPostsByPage(@Param("offset") int offset, @Param("pageSize") int pageSize);
 
     /**
      * 按帖子ID查询帖子

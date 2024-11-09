@@ -11,7 +11,6 @@ import cn.cola.model.vo.PostVO;
 import cn.cola.model.vo.UserVO;
 import cn.cola.post.service.PostService;
 import cn.cola.service.service.UserInnerService;
-import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -54,13 +53,13 @@ public class PostController {
      * 搜索帖子
      */
     @GetMapping("/search")
-    public BaseResponse<Page<PostVO>> searchPost(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+    public BaseResponse<List<PostVO>> searchPost(@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
                                                  @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                                                  @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         ThrowUtils.throwIf(page < 1, ErrorCode.PARAMS_ERROR, "页码不能小于1");
         ThrowUtils.throwIf(size < 1, ErrorCode.PARAMS_ERROR, "每页条数不能小于1");
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR, "每页条数不能大于20");
-        Page<PostVO> ret = postService.searchPost(keyword, page, size);
+        List<PostVO> ret = postService.searchPost(keyword, page, size);
         return ResultUtils.success(ret);
     }
 

@@ -45,7 +45,7 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
         val posts: List<Post>
         if (keywords.isNullOrBlank()) {
             //分页查询所有帖子
-            posts = postMapper.findPostsByPage(pageNum, pageSize)
+            posts = postMapper.findPostsByPage((pageNum-1)*pageSize, pageSize)
         } else {
 
             val searchPattern = "%$keywords%"
@@ -53,7 +53,7 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
                 searchPattern,
                 searchPattern,
                 searchPattern,
-                pageNum,
+                (pageNum-1)*pageSize,
                 pageSize
             )
         }
