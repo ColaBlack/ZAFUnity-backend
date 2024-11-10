@@ -23,7 +23,9 @@
 
 #### 使用说明
 
-1. 需要和对应的前端项目联调，前端项目地址 [gitee地址](https://gitee.com/colablack/ZAFUnity-frontend)
+1. 需要和对应的前端项目联调，前端项目地址 
+[gitee地址](https://gitee.com/colablack/ZAFUnity-frontend)
+[github地址](https://github.com/ColaBlack/ZAFUnity-frontend)
 
 #### 参与贡献
 
