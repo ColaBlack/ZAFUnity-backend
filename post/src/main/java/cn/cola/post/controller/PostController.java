@@ -34,8 +34,8 @@ public class PostController {
      * 发布帖子
      */
     @PostMapping("/publish")
-    public BaseResponse<Boolean> publishPost(@RequestBody PublishPostDTO publishPostDTO,
-                                             @CookieValue(value = UserConstant.USER_LOGIN_STATE) String token) {
+    public BaseResponse<Long> publishPost(@RequestBody PublishPostDTO publishPostDTO,
+                                          @CookieValue(value = UserConstant.USER_LOGIN_STATE) String token) {
         UserVO userVO = JwtUtils.verifyAndGetUserVO(token);
         BaseResponse<Boolean> res = userInnerService.validLoginStatus(token);
         Boolean hasPassValid = res.getData();
@@ -45,7 +45,7 @@ public class PostController {
         String title = publishPostDTO.getTitle();
         String content = publishPostDTO.getContent();
         List<String> tags = publishPostDTO.getTags();
-        boolean ret = postService.publishPost(tags, title, content, authorId);
+        Long ret = postService.publishPost(tags, title, content, authorId);
         return ResultUtils.success(ret);
     }
 

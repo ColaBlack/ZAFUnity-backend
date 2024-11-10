@@ -22,7 +22,7 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
     /**
      * 发布帖子
      */
-    override fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Boolean {
+    override fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Long {
         validPost(tags, title, content)
         ThrowUtils.throwIf(authorId <= 0, ErrorCode.PARAMS_ERROR, "作者ID异常")
 
@@ -31,7 +31,8 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
         post.content = content
         post.postTags = JSONUtil.toJsonStr(tags)
         post.createrId = authorId
-        return this.baseMapper.insert(post) == 1
+        this.baseMapper.insert(post)
+        return this.baseMapper.selectOne(post).postId
     }
 
     /**
@@ -45,7 +46,7 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
         val posts: List<Post>
         if (keywords.isNullOrBlank()) {
             //分页查询所有帖子
-            posts = postMapper.findPostsByPage((pageNum-1)*pageSize, pageSize)
+            posts = postMapper.findPostsByPage((pageNum - 1) * pageSize, pageSize)
         } else {
 
             val searchPattern = "%$keywords%"
@@ -53,7 +54,7 @@ open class PostServiceImpl : PostService, ServiceImpl<PostMapper, Post>() {
                 searchPattern,
                 searchPattern,
                 searchPattern,
-                (pageNum-1)*pageSize,
+                (pageNum - 1) * pageSize,
                 pageSize
             )
         }

@@ -6,7 +6,7 @@ interface PostService {
     /**
      * 发布帖子
      */
-    fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Boolean
+    fun publishPost(tags: List<String>, title: String, content: String, authorId: Long): Long
 
     /**
      * 搜索帖子

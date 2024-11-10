@@ -85,7 +85,9 @@ public class UserController {
      */
     @GetMapping("/get/UserVO")
     public BaseResponse<UserVO> getUserVO(HttpServletRequest request) {
-        Cookie cookie = Arrays.stream(request.getCookies())
+        Cookie[] cookies = request.getCookies();
+        ThrowUtils.throwIf(cookies == null || cookies.length == 0, ErrorCode.NOT_LOGIN_ERROR, "请先登录");
+        Cookie cookie = Arrays.stream(cookies)
                 .filter(
                         c -> c.getName()
                                 .equals(UserConstant.USER_LOGIN_STATE))
